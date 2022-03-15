@@ -1,6 +1,7 @@
 import './App.css';
 import DiaryEditor from './DiaryEditor';
 import DiaryList from './DiaryList';
+import { useState, useRef } from 'react';
 
 const dummyList = [
   {
@@ -28,10 +29,34 @@ const dummyList = [
 ]
 
 const App = () => {
+
+  const [data, setData] = useState([]);
+
+  const dataid = useRef(0)
+
+  const onCreate = (author, content, emotion) => {
+    
+    const created_date = new Date().getTime()
+    const newitem = {
+      author,
+      content,
+      emotion,
+      created_date,
+      id : dataid.current
+    }
+     dataid.current += 1
+     setData([newitem, ...data])
+  }
+
+const onRemove = (targetId) => {
+  const newData = data.filter((e) => e.id !== targetId)
+  setData(newData)
+} 
+
   return (
     <div>
-     <DiaryEditor />
-     <DiaryList dummyList={dummyList}/>
+     <DiaryEditor onCreate={onCreate}/>
+     <DiaryList onRemove={onRemove} dummyList={data}/>
     </div>
   );
 }

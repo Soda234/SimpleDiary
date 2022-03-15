@@ -1,4 +1,22 @@
-const DiaryItem = ({author, content, emotion, created_date}) => {
+import { useState } from 'react';
+
+const DiaryItem = ({onRemove, id, author, content, emotion, created_date}) => {
+    
+    const [isEdit, setisEdit] = useState(false)
+    const toggleisEdit = () => {        
+        setisEdit(!isEdit)
+        if(isEdit){
+            setLocalContent(content)
+        }
+    }
+
+    const [localContent, setLocalContent] = useState("")
+
+    const handleRemove = () => {
+        if(window.confirm(`${id}번째 아이디를 삭제하시겠습니까?`)){
+            onRemove(id)
+        }
+    }
     return(
         <div className="DiaryItem">
              <div>작성자 : {author} </div>
@@ -7,7 +25,22 @@ const DiaryItem = ({author, content, emotion, created_date}) => {
              <div className="Info">
                        
                  </div> 
-                <div className="content"> {content}  </div>
+                <div className="content">
+                    {isEdit ? <div>
+                        <textarea
+                             value={localContent}
+                             onChange={(e) => {
+                                 setLocalContent(e.target.value)
+                             }}/> 
+                             </div> 
+                             :  content}
+                     </div>
+                <button  onClick={handleRemove}> 삭제 </button>
+               {/*  {isEdit ? 
+                 
+                :
+                } */}
+                <button onClick={toggleisEdit}>{isEdit ? "수정취소" : "수정"}</button>
         </div>
     )
 }
