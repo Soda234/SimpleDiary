@@ -1,17 +1,29 @@
-import { useState } from 'react';
+import { useState, useRef, useEffect } from 'react';
 
 const DiaryItem = ({onRemove, id, author, content, emotion, created_date}) => {
     
     const [isEdit, setisEdit] = useState(false)
-    const toggleisEdit = () => {        
+    const EditFocus = useRef();
+
+    useEffect(() => {
+        if(isEdit){            
+            setLocalContent(content)  
+            EditFocus.current.focus()
+        }  
+        console.log("1", isEdit)
+    }, [isEdit])
+    
+    const toggleisEdit = () => {  
         setisEdit(!isEdit)
-        if(isEdit){
-            setLocalContent(content)
-        }
+      
     }
 
     const [localContent, setLocalContent] = useState("")
 
+    const onEdit = () => {
+
+    }
+    
     const handleRemove = () => {
         if(window.confirm(`${id}번째 아이디를 삭제하시겠습니까?`)){
             onRemove(id)
@@ -28,6 +40,7 @@ const DiaryItem = ({onRemove, id, author, content, emotion, created_date}) => {
                 <div className="content">
                     {isEdit ? <div>
                         <textarea
+                             ref={EditFocus}
                              value={localContent}
                              onChange={(e) => {
                                  setLocalContent(e.target.value)
@@ -35,12 +48,17 @@ const DiaryItem = ({onRemove, id, author, content, emotion, created_date}) => {
                              </div> 
                              :  content}
                      </div>
-                <button  onClick={handleRemove}> 삭제 </button>
-               {/*  {isEdit ? 
-                 
+                
+               {  isEdit ? <>
+                  <button onClick={toggleisEdit}>{isEdit ? "수정 취소" : "수정"}</button>
+                  <button onClick={toggleisEdit}>{"수정 완료"}</button>
+                  </>
                 :
-                } */}
-                <button onClick={toggleisEdit}>{isEdit ? "수정취소" : "수정"}</button>
+                <>
+                <button  onClick={handleRemove}> 삭제 </button>
+                <button onClick={toggleisEdit}>{isEdit ? "수정 취소" : "수정"}</button> 
+                </>
+                }
         </div>
     )
 }
