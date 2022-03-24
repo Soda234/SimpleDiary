@@ -2,6 +2,7 @@ import './App.css';
 import DiaryEditor from './DiaryEditor';
 import DiaryList from './DiaryList';
 import { useState, useRef } from 'react';
+import Lifecycle from './Lifecycle';
 
 const dummyList = [
   {
@@ -53,10 +54,17 @@ const onRemove = (targetId) => {
   setData(newData)
 } 
 
+const onEdit = (targetId, newContent) => {
+        setData(
+          data.map((data) => data.id === targetId ? {...data, content : newContent} : data)
+        )
+}
+
   return (
     <div>
+     <Lifecycle />
      <DiaryEditor onCreate={onCreate}/>
-     <DiaryList onRemove={onRemove} dummyList={data}/>
+     <DiaryList onRemove={onRemove} onEdit={onEdit} dummyList={data}/>
     </div>
   );
 }

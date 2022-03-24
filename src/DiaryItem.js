@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect } from 'react';
 
-const DiaryItem = ({onRemove, id, author, content, emotion, created_date}) => {
+const DiaryItem = ({onRemove, onEdit, id, author, content, emotion, created_date,}) => {
     
     const [isEdit, setisEdit] = useState(false)
     const EditFocus = useRef();
@@ -10,7 +10,7 @@ const DiaryItem = ({onRemove, id, author, content, emotion, created_date}) => {
             setLocalContent(content)  
             EditFocus.current.focus()
         }  
-        console.log("1", isEdit)
+
     }, [isEdit])
     
     const toggleisEdit = () => {  
@@ -20,15 +20,28 @@ const DiaryItem = ({onRemove, id, author, content, emotion, created_date}) => {
 
     const [localContent, setLocalContent] = useState("")
 
-    const onEdit = () => {
 
-    }
     
     const handleRemove = () => {
         if(window.confirm(`${id}번째 아이디를 삭제하시겠습니까?`)){
             onRemove(id)
         }
     }
+
+    const handleEdit = () => {
+        if(localContent.length < 5){
+            alert("5글자 이상 입력해 주세요.")
+            EditFocus.current.focus()
+            return
+        }
+
+        onEdit(id, localContent)
+        toggleisEdit(!isEdit)
+    }
+
+    
+
+   
     return(
         <div className="DiaryItem">
              <div>작성자 : {author} </div>
@@ -51,7 +64,7 @@ const DiaryItem = ({onRemove, id, author, content, emotion, created_date}) => {
                 
                {  isEdit ? <>
                   <button onClick={toggleisEdit}>{isEdit ? "수정 취소" : "수정"}</button>
-                  <button onClick={toggleisEdit}>{"수정 완료"}</button>
+                  <button onClick={handleEdit}>{"수정 완료"}</button>
                   </>
                 :
                 <>
