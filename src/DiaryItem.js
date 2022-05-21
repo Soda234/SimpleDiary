@@ -1,9 +1,18 @@
-import { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
+import { DiaryDispatchcontext } from './App';
+import { useContext } from 'react';
 
-const DiaryItem = ({onRemove, onEdit, id, author, content, emotion, created_date,}) => {
+const DiaryItem = ({/* onRemove, onEdit, */ id, author, content, emotion, created_date}) => {
     
+
+    const {onRemove, onEdit} = useContext(DiaryDispatchcontext)
+
     const [isEdit, setisEdit] = useState(false)
     const EditFocus = useRef();
+
+    useEffect(() => {
+        console.log(`${id}번 쨰 아이템 랜더`)
+    })
 
     useEffect(() => {
         if(isEdit){            
@@ -76,4 +85,4 @@ const DiaryItem = ({onRemove, onEdit, id, author, content, emotion, created_date
     )
 }
 
-export default DiaryItem;
+export default React.memo(DiaryItem);
